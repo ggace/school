@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>서대전고 공지사항 변화</title>
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+        <script>
+            function setCookie(cookie_name, value, days) {
+                var exdate = new Date();
+                exdate.setDate(exdate.getDate() + days);
+                // 설정 일수만큼 현재시간에 만료값으로 지정
+
+                var cookie_value = escape(value) + ((days == null) ? '' : '; expires=' + exdate.toUTCString());
+                document.cookie = cookie_name + '=' + cookie_value;
+            }  
+            function getCookie(cookie_name) {
+                var x, y;
+                var val = document.cookie.split(';');
+
+                for (var i = 0; i < val.length; i++) {
+                    x = val[i].substr(0, val[i].indexOf('='));
+                    y = val[i].substr(val[i].indexOf('=') + 1);
+                    x = x.replace(/^\s+|\s+$/g, ''); // 앞과 뒤의 공백 제거하기
+                    if (x == cookie_name) {
+                    return unescape(y); // unescape로 디코딩 후 값 리턴
+                    }
+                } 
+            }
+        </script>
+    </head>
+    <body class="container mx-auto">
+        <h1 class="text-center text-2xl font-bold">서대전고 공지사항 변화</h1>
+        <article>
+            
+        </article>
+        <script defer>
+            
+            currentId = getCookie('currentId');
+            if(currentId == undefined){
+                currentId = 0;
+            }
+            $.ajax({
+                url: '/getNoticeChange',
+                method: "GET",
+                dataType: "json"
+            }).done(function(json) { 
+                if(currentId != json.id){
+                    currentId = json.id;
+                    $("article").html("서대전고 홈페이지에 새로운 공지사항이 추가되었습니다.")
+                    alert("서대전고 홈페이지에 새로운 공지사항이 추가되었습니다.")
+                    setCookie("currentId", currentId, 1);
+                }
+            }).fail(function(xhr, status, errorThrown) { 
+                alert("실패")
+            })
+
+
+        </script>
+
+    </body>
+</html>

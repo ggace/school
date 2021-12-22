@@ -2,7 +2,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import threading
 import time
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
@@ -43,6 +43,10 @@ def getNotice():
 
 @app.route("/")
 def mainPage():
+    return render_template("index.html")
+
+@app.route("/getNoticeChange")
+def getNoticeChange():
     global latestId
     global msg
     pageHtml = {"id" : latestId}
